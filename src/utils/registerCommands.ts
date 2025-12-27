@@ -21,11 +21,11 @@ export function registerCommands(plugin: TaskCountPlugin) {
                     let cache = plugin.app.metadataCache.getFileCache(file)
     
                     if (plugin.settings.enableTaskNotesCount) {
-                        updateTaskNotesTaskCount(plugin, null, view);
+                        void updateTaskNotesTaskCount(plugin, null, view)
                     }
         
                     if (plugin.settings.enableTasksCount && cache) {
-                        updateTasksCount(view, cache, plugin);
+                        void updateTasksCount(view, cache, plugin)
                     }
                   }
                 }

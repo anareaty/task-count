@@ -1,5 +1,10 @@
+
+
 import { TFile } from "obsidian";
 import PrettyPropertiesPlugin from "main";
+
+
+
 
 /**
  * Gets a nested property from an object using dot notation.
@@ -7,6 +12,7 @@ import PrettyPropertiesPlugin from "main";
  * @param path The path to the property using dot notation (e.g., 'obsidian.icon').
  * @returns The value at the specified path, or undefined if not found.
  */
+
 export const getNestedProperty = (obj: any, path: string): any => {
     if (!obj || !path) {
         return undefined;
@@ -29,6 +35,7 @@ export const getNestedProperty = (obj: any, path: string): any => {
  * @param path The path to the property using dot notation (e.g., 'obsidian.icon').
  * @param value The value to set.
  */
+
 export const setNestedProperty = (obj: any, path: string, value: any): void => {
     if (!obj || !path) {
         return;
@@ -62,6 +69,7 @@ export const setNestedProperty = (obj: any, path: string, value: any): void => {
  * @param path The path to the property using dot notation (e.g., 'obsidian.icon').
  * @returns true if the property was deleted, false otherwise.
  */
+
 export const deleteNestedProperty = (obj: any, path: string): boolean => {
     if (!obj || !path) {
         return false;
@@ -93,7 +101,7 @@ export const deleteNestedProperty = (obj: any, path: string): boolean => {
 export const removeProperty = async (propName: string, plugin: PrettyPropertiesPlugin) => {
     let file = plugin.app.workspace.getActiveFile();
     if (file instanceof TFile) {
-        plugin.app.fileManager.processFrontMatter(file, (fm) => {
+        await plugin.app.fileManager.processFrontMatter(file, (fm) => {
             if (getNestedProperty(fm, propName)) {
                 deleteNestedProperty(fm, propName);
             }
@@ -101,7 +109,8 @@ export const removeProperty = async (propName: string, plugin: PrettyPropertiesP
     }
 }
 
-export const getCurrentProperty = (propName: string, plugin: PrettyPropertiesPlugin) => {
+export const getCurrentProperty = (propName: string, plugin: PrettyPropertiesPlugin): any => {
+
     let prop: any;
     let file = plugin.app.workspace.getActiveFile();
     if (file instanceof TFile) {
@@ -113,7 +122,7 @@ export const getCurrentProperty = (propName: string, plugin: PrettyPropertiesPlu
 }
 
 
-export const getPropertyValue = (e: MouseEvent, plugin: PrettyPropertiesPlugin) => {
+export const getPropertyValue = (e: MouseEvent, plugin: PrettyPropertiesPlugin): any => {
     let targetEl = e.target;
     let text;
 
@@ -150,8 +159,10 @@ export const getPropertyValue = (e: MouseEvent, plugin: PrettyPropertiesPlugin) 
 
 export const getPropertyType = (propName: string, plugin: PrettyPropertiesPlugin) => {
     //@ts-ignore
-    let propertyTypeObject = plugin.app.metadataTypeManager.getPropertyInfo(propName.toLowerCase());
-    let propertyType;
+    let metadataTypeManager = plugin.app.metadataTypeManager
+    let lowerPropName = propName.toLowerCase()
+    let propertyTypeObject = metadataTypeManager.getPropertyInfo(lowerPropName);
+    let propertyType: string | undefined
     if (propertyTypeObject) {
         propertyType = propertyTypeObject.widget || propertyTypeObject.type;
     }

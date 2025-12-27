@@ -7,7 +7,7 @@ export const updateTasksCount = async (
     view: MarkdownView | FileView,
     cache: CachedMetadata,
     plugin: TaskCountPlugin
-) => {
+) : Promise<void> => {
     let frontmatter = cache.frontmatter;
     let tasksProp = plugin.settings.allTasksCount;
     let completedProp = plugin.settings.completedTasksCount;
@@ -102,21 +102,21 @@ export const updateTasksCount = async (
 
 
 
-export const updateTaskCountOnCacheChanged = async (file: TFile, cache: CachedMetadata, plugin: TaskCountPlugin) => {
+export const updateTaskCountOnCacheChanged = async (file: TFile, cache: CachedMetadata, plugin: TaskCountPlugin): Promise<void> => {
     if (plugin.settings.enableTasksCount && plugin.settings.autoTasksCount) {
         let sourcePath = file.path || ""
         let leaves = plugin.app.workspace.getLeavesOfType("markdown");
         for (let leaf of leaves) {
             let view = leaf.view;
             if (view instanceof MarkdownView && view.file?.path == sourcePath) {
-                updateTasksCount(view, cache, plugin)
+                void updateTasksCount(view, cache, plugin)
             }
         }
     }
 }
 
 
-export const updateAllTaskCounts = async (plugin: TaskCountPlugin) => {
+export const updateAllTaskCounts = async (plugin: TaskCountPlugin): Promise<void> => {
 
     if (plugin.settings.enableTasksCount && plugin.settings.autoTasksCount) {
         let leaves = plugin.app.workspace.getLeavesOfType("markdown");
@@ -127,7 +127,7 @@ export const updateAllTaskCounts = async (plugin: TaskCountPlugin) => {
                 if (file instanceof TFile) {
                     let cache = plugin.app.metadataCache.getFileCache(file)
                     if (cache) {
-                        updateTasksCount(view, cache, plugin)
+                        void updateTasksCount(view, cache, plugin)
                     }
                 }
             }

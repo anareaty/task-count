@@ -3,7 +3,9 @@ import en from 'localization/locales/en';
 import ru from 'localization/locales/ru';
 
 
-const locales: Record<string, any> = {
+type Locale = Record<string, string>
+
+const locales: Record<string, Locale> = {
   en,
   ru
 };
@@ -12,14 +14,21 @@ export class LocalizationService {
   private currentLocale: string = 'en';
 
   setLocale() {
-    let locale: string
-		if (getLanguage) locale = getLanguage();
-		else locale = window.localStorage.language;
-    if (locales[locale]) this.currentLocale = locale;
+    let locale: string = "en"
+		if (getLanguage) {
+      locale = getLanguage();
+    } else {
+      // Fallback for the older version of Obsidian
+      let testLocale = window.localStorage.language as unknown
+      if (typeof testLocale == "string") {
+        locale = testLocale
+      }
+    }
+    if (locale && locales[locale]) this.currentLocale = locale;
   }
 
   t(key: string): string {
-    const translation = locales[this.currentLocale][key] || locales['en'][key] || key;
+    const translation = locales[this.currentLocale]?.[key] || locales['en']![key] || key;
     return translation;
   }
 }

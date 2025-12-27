@@ -18,10 +18,13 @@ export const needToUpdateTaskNotes = (plugin: TaskCountPlugin, cache?: CachedMet
                 }
             } else if (taskIdentificationMethod == "property") {
                 let taskPropertyName = tn.settings.taskPropertyName
-                let taskPropertyValue = tn.settings.taskPropertyValue
-                if (getNestedProperty(cache.frontmatter, taskPropertyName) == taskPropertyValue) {
-                    isTask = true
+                if (typeof taskPropertyName == "string") {
+                    let taskPropertyValue = tn.settings.taskPropertyValue
+                    if (getNestedProperty(cache.frontmatter, taskPropertyName) == taskPropertyValue) {
+                        isTask = true
+                    }
                 }
+                
             } 
         } 
         return isTask
@@ -31,7 +34,7 @@ export const needToUpdateTaskNotes = (plugin: TaskCountPlugin, cache?: CachedMet
 
 
 
-export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TFile | null, view?: View) => {
+export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TFile | null, view?: View): Promise<void> => {
 
     //@ts-ignore
     let tn = plugin.app.plugins.getPlugin("tasknotes")
@@ -42,12 +45,18 @@ export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TF
 
     if (tn && tn.taskLinkDetectionService && file instanceof TFile) {
         let statuses = tn.statusManager?.statuses
-        let completedStatuses = statuses.filter((s: any) => s.isCompleted)
+        let completedStatuses = statuses.filter((s: any) => {
+            let status = s.isCompleted
+            if (status) return true 
+            else return false
+        })
 
         let projectTasks = await tn.projectSubtasksService.getTasksLinkedToProject(file)
         
         let completedProjectTasks = projectTasks.filter((t: any) => {
-            return completedStatuses.find((s: any) => s.value == t.status)
+            let task = completedStatuses.find((s: any) => s.value == t.status)
+            if (task) return true 
+            else return false
         })
 
         let inlineTasks = []
@@ -108,7 +117,7 @@ export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TF
 
        
 
-        plugin.app.fileManager.processFrontMatter(file, fm => {
+        await plugin.app.fileManager.processFrontMatter(file, fm => {
 
             if (plugin.settings.allTNTasksCount && getNestedProperty(fm, plugin.settings.allTNTasksCount) !== undefined) {
                 setNestedProperty(fm, plugin.settings.allTNTasksCount, allTasks.length);
@@ -163,7 +172,7 @@ export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TF
 
 
 
-export const updateTaskNotesTaskCountOnCacheChanged = async (file: TFile, cache: CachedMetadata, plugin: TaskCountPlugin) => {
+export const updateTaskNotesTaskCountOnCacheChanged = async (file: TFile, cache: CachedMetadata, plugin: TaskCountPlugin): Promise<void> => {
     if (plugin.settings.enableTaskNotesCount && plugin.settings.autoTasksCount) {
         let updateTaskNotes = needToUpdateTaskNotes(plugin, cache)
         let leaves = plugin.app.workspace.getLeavesOfType("markdown");
@@ -172,7 +181,7 @@ export const updateTaskNotesTaskCountOnCacheChanged = async (file: TFile, cache:
         for (let leaf of leaves) {
             if (leaf.view instanceof MarkdownView) {
                 if (updateTaskNotes || file == currentFile) {
-                    updateTaskNotesTaskCount(plugin, null, leaf.view)
+                    void updateTaskNotesTaskCount(plugin, null, leaf.view)
                 }
             }
         }
@@ -181,9 +190,7 @@ export const updateTaskNotesTaskCountOnCacheChanged = async (file: TFile, cache:
 
 
 
-export const updateAllTaskNotesTaskCounts = async (plugin: TaskCountPlugin) => {
-
-    
+export const updateAllTaskNotesTaskCounts = async (plugin: TaskCountPlugin): Promise<void> => {
     if (plugin.settings.enableTaskNotesCount && plugin.settings.autoTasksCount) {
         
         let leaves = plugin.app.workspace.getLeavesOfType("markdown");
@@ -194,7 +201,7 @@ export const updateAllTaskNotesTaskCounts = async (plugin: TaskCountPlugin) => {
                 if (file instanceof TFile) {
                     let cache = plugin.app.metadataCache.getFileCache(file)
                     if (cache) {
-                        updateTaskNotesTaskCount(plugin, null, leaf.view)
+                        void updateTaskNotesTaskCount(plugin, null, leaf.view)
                     }
                 }
             }

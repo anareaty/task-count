@@ -8,7 +8,6 @@ import { updateTaskCountOnCacheChanged } from "./utils/taskCount";
 
 export default class TaskCountPlugin extends Plugin {
 	settings: TCPluginSettings;
-	patches: Record<string, any>
 
 	async onload() {
 		await this.loadSettings();
@@ -17,15 +16,15 @@ export default class TaskCountPlugin extends Plugin {
 		
 		this.registerEvent(
 			this.app.metadataCache.on("changed", async (file, data, cache) => {
-				updateTaskCountOnCacheChanged(file, cache, this)
-				updateTaskNotesTaskCountOnCacheChanged(file, cache, this)
+				void updateTaskCountOnCacheChanged(file, cache, this)
+				void updateTaskNotesTaskCountOnCacheChanged(file, cache, this)
 			})
 		);
 
 		this.registerEvent(
 			this.app.workspace.on("file-open", async (file) => {
 				if (file && this.settings.enableTaskNotesCount && this.settings.autoTasksCount) {
-					updateTaskNotesTaskCount(this, file)
+					void updateTaskNotesTaskCount(this, file)
 				}
 			})
 		);
@@ -35,13 +34,15 @@ export default class TaskCountPlugin extends Plugin {
 
 	onunload() {}
 
+	
 	async loadSettings() {
 		this.settings = Object.assign(
 			{},
 			DEFAULT_SETTINGS,
-			await this.loadData()
+			await this.loadData() as Partial<TCPluginSettings>
 		)
 	}
+	
 
 	async saveSettings() {
 		await this.saveData(this.settings);
