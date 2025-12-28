@@ -2,7 +2,7 @@
 
 This plugin used to be a part of my another plugin, [Pretty Properties](https://github.com/anareaty/pretty-properties) and has all it's current functional related to tasks counting. I decided to split it off into a separate plugin for the people who don't need all the other Pretty Properties features.
 
-I am planning to remove task count functional from Pretty Properties in the future, but untill it's done, please, don't use these two plugins together, since it would make the same code run twice and can lead to unexpected results.
+I am planning to remove task count functional from Pretty Properties in the future, but untill it's done, please, don't use these two plugins together with task counting features enabled in both, since it would make the same code run twice and can lead to unexpected results.
 
 ## Usage
 
