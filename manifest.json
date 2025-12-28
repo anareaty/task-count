@@ -1,6 +1,6 @@
 {
 	"id": "task-count",
-	"name": "Task count",
+	"name": "Task Count",
 	"version": "1.0.0",
 	"minAppVersion": "1.6.7",
 	"description": "Count tasks in notes and save result to properties.",
