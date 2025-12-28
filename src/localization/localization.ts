@@ -19,10 +19,7 @@ export class LocalizationService {
       locale = getLanguage();
     } else {
       // Fallback for the older version of Obsidian
-      let testLocale = window.localStorage.language as unknown
-      if (typeof testLocale == "string") {
-        locale = testLocale
-      }
+      locale = window.localStorage.language
     }
     if (locale && locales[locale]) this.currentLocale = locale;
   }
