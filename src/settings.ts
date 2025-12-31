@@ -121,7 +121,7 @@ export class TCSettingTab extends PluginSettingTab {
 			.setName(i18n.t("UNCOMPLETED_TASKS_COUNT_STATUSES"))
 			.addText(text => text
 				// eslint-disable-next-line obsidianmd/ui/sentence-case
-				.setPlaceholder('banner')
+				.setPlaceholder('" "')
 				.setValue(plugin.settings.uncompletedTasksStatuses.map(s => "\"" + s + "\"").join(", "))
 				.onChange(async (value) => {
 					let valueArr = value.split(",").map(v => {
