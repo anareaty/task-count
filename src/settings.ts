@@ -74,7 +74,7 @@ export class TCSettingTab extends PluginSettingTab {
 				.onChange(async (value) => {
 					plugin.settings.enableTasksCount = value
 					await plugin.saveSettings();
-					updateAllTaskCounts(plugin)
+					void updateAllTaskCounts(plugin)
 					this.display();
 				}));
 
@@ -85,15 +85,11 @@ export class TCSettingTab extends PluginSettingTab {
 				let ph = "tasks"
 				text
 				.setPlaceholder(ph)
-			.addText(text => {
-				let ph = "tasks"
-				text
-				.setPlaceholder(ph)
 				.setValue(plugin.settings.allTasksCount)
 				.onChange(async (value) => {
 					plugin.settings.allTasksCount = value;
 					await plugin.saveSettings();
-					updateAllTaskCounts(plugin)
+					void updateAllTaskCounts(plugin)
 				})});
 
 			new Setting(containerEl)
@@ -106,7 +102,7 @@ export class TCSettingTab extends PluginSettingTab {
 				.onChange(async (value) => {
 					plugin.settings.uncompletedTasksCount = value;
 					await plugin.saveSettings();
-					updateAllTaskCounts(plugin)
+					void updateAllTaskCounts(plugin)
 				})});
 
 			new Setting(containerEl)
@@ -115,25 +111,17 @@ export class TCSettingTab extends PluginSettingTab {
 				let ph = 'tasks_completed'
 				text
 				.setPlaceholder(ph)
-			.addText(text => {
-				let ph = 'tasks_completed'
-				text
-				.setPlaceholder(ph)
 				.setValue(plugin.settings.completedTasksCount)
 				.onChange(async (value) => {
 					plugin.settings.completedTasksCount = value;
 					await plugin.saveSettings();
-					updateAllTaskCounts(plugin)
+					void updateAllTaskCounts(plugin)
 				})});
 
 			containerEl.createEl("p", {text: i18n.t("TASK_STATUSES_DESCRIPTION")})
 
 			new Setting(containerEl)
 			.setName(i18n.t("UNCOMPLETED_TASKS_COUNT_STATUSES"))
-			.addText(text => {
-				let ph = '" "'
-				text
-				.setPlaceholder(ph)
 			.addText(text => {
 				let ph = '" "'
 				text
@@ -154,15 +142,11 @@ export class TCSettingTab extends PluginSettingTab {
 					valueArr = Array.from(new Set(valueArr))
 					plugin.settings.uncompletedTasksStatuses = valueArr;
 					await plugin.saveSettings();
-					updateAllTaskCounts(plugin)
+					void updateAllTaskCounts(plugin)
 				})});
 
 			new Setting(containerEl)
 			.setName(i18n.t("COMPLETED_TASKS_COUNT_STATUSES"))
-			.addText(text => {
-				let ph = '"x"'
-				text
-				.setPlaceholder(ph)
 			.addText(text => {
 				let ph = '"x"'
 				text
@@ -183,7 +167,7 @@ export class TCSettingTab extends PluginSettingTab {
 					valueArr = Array.from(new Set(valueArr))
 					plugin.settings.completedTasksStatuses = valueArr;
 					await plugin.saveSettings();
-					updateAllTaskCounts(plugin)
+					void updateAllTaskCounts(plugin)
 				})});
 		}
 
@@ -197,7 +181,7 @@ export class TCSettingTab extends PluginSettingTab {
 				.onChange(async (value) => {
 					plugin.settings.enableTaskNotesCount = value
 					await plugin.saveSettings();
-					updateAllTaskNotesTaskCounts(plugin)
+					void updateAllTaskNotesTaskCounts(plugin)
 					this.display();
 				}));
 
@@ -212,7 +196,7 @@ export class TCSettingTab extends PluginSettingTab {
 				.onChange(async (value) => {
 					plugin.settings.allTNProjectTasksCount = value;
 					await plugin.saveSettings();
-					updateAllTaskNotesTaskCounts(plugin)
+					void updateAllTaskNotesTaskCounts(plugin)
 				})});
 
 			new Setting(containerEl)
@@ -221,15 +205,11 @@ export class TCSettingTab extends PluginSettingTab {
 				let ph = 'tn_project_tasks_completed'
 				text
 				.setPlaceholder(ph)
-			.addText(text => {
-				let ph = 'tn_project_tasks_completed'
-				text
-				.setPlaceholder(ph)
 				.setValue(plugin.settings.completedTNProjectTasksCount)
 				.onChange(async (value) => {
 					plugin.settings.completedTNProjectTasksCount = value;
 					await plugin.saveSettings();
-					updateAllTaskNotesTaskCounts(plugin)
+					void updateAllTaskNotesTaskCounts(plugin)
 				})});
 
 			new Setting(containerEl)
@@ -238,15 +218,11 @@ export class TCSettingTab extends PluginSettingTab {
 				let ph = 'tn_project_tasks_uncompleted'
 				text
 				.setPlaceholder(ph)
-			.addText(text => {
-				let ph = 'tn_project_tasks_uncompleted'
-				text
-				.setPlaceholder(ph)
 				.setValue(plugin.settings.uncompletedTNProjectTasksCount)
 				.onChange(async (value) => {
 					plugin.settings.uncompletedTNProjectTasksCount = value;
 					await plugin.saveSettings();
-					updateAllTaskNotesTaskCounts(plugin)
+					void updateAllTaskNotesTaskCounts(plugin)
 				})});
 
 			new Setting(containerEl)
@@ -255,15 +231,11 @@ export class TCSettingTab extends PluginSettingTab {
 				let ph = 'tn_inline_tasks'
 				text
 				.setPlaceholder(ph)
-			.addText(text => {
-				let ph = 'tn_inline_tasks'
-				text
-				.setPlaceholder(ph)
 				.setValue(plugin.settings.allTNInlineTasksCount)
 				.onChange(async (value) => {
 					plugin.settings.allTNInlineTasksCount = value;
 					await plugin.saveSettings();
-					updateAllTaskNotesTaskCounts(plugin)
+					void updateAllTaskNotesTaskCounts(plugin)
 				})});
 
 			new Setting(containerEl)
@@ -272,15 +244,11 @@ export class TCSettingTab extends PluginSettingTab {
 				let ph = 'tn_inline_tasks_completed'
 				text
 				.setPlaceholder(ph)
-			.addText(text => {
-				let ph = 'tn_inline_tasks_completed'
-				text
-				.setPlaceholder(ph)
 				.setValue(plugin.settings.completedTNInlineTasksCount)
 				.onChange(async (value) => {
 					plugin.settings.completedTNInlineTasksCount = value;
 					await plugin.saveSettings();
-					updateAllTaskNotesTaskCounts(plugin)
+					void updateAllTaskNotesTaskCounts(plugin)
 				})});
 
 			new Setting(containerEl)
@@ -289,15 +257,11 @@ export class TCSettingTab extends PluginSettingTab {
 				let ph = 'tn_inline_tasks_uncompleted'
 				text
 				.setPlaceholder(ph)
-			.addText(text => {
-				let ph = 'tn_inline_tasks_uncompleted'
-				text
-				.setPlaceholder(ph)
 				.setValue(plugin.settings.uncompletedTNInlineTasksCount)
 				.onChange(async (value) => {
 					plugin.settings.uncompletedTNInlineTasksCount = value;
 					await plugin.saveSettings();
-					updateAllTaskNotesTaskCounts(plugin)
+					void updateAllTaskNotesTaskCounts(plugin)
 				})});
 
 			new Setting(containerEl)
@@ -306,15 +270,11 @@ export class TCSettingTab extends PluginSettingTab {
 				let ph = 'tn_tasks'
 				text
 				.setPlaceholder(ph)
-			.addText(text => {
-				let ph = 'tn_tasks'
-				text
-				.setPlaceholder(ph)
 				.setValue(plugin.settings.allTNTasksCount)
 				.onChange(async (value) => {
 					plugin.settings.allTNTasksCount = value;
 					await plugin.saveSettings();
-					updateAllTaskNotesTaskCounts(plugin)
+					void updateAllTaskNotesTaskCounts(plugin)
 				})});
 
 			new Setting(containerEl)
@@ -323,15 +283,11 @@ export class TCSettingTab extends PluginSettingTab {
 				let ph = 'tn_tasks_completed'
 				text
 				.setPlaceholder(ph)
-			.addText(text => {
-				let ph = 'tn_tasks_completed'
-				text
-				.setPlaceholder(ph)
 				.setValue(plugin.settings.completedTNTasksCount)
 				.onChange(async (value) => {
 					plugin.settings.completedTNTasksCount = value;
 					await plugin.saveSettings();
-					updateAllTaskNotesTaskCounts(plugin)
+					void updateAllTaskNotesTaskCounts(plugin)
 				})});
 
 			new Setting(containerEl)
@@ -340,15 +296,11 @@ export class TCSettingTab extends PluginSettingTab {
 				let ph = 'tn_tasks_uncompleted'
 				text
 				.setPlaceholder(ph)
-			.addText(text => {
-				let ph = 'tn_tasks_uncompleted'
-				text
-				.setPlaceholder(ph)
 				.setValue(plugin.settings.uncompletedTNTasksCount)
 				.onChange(async (value) => {
 					plugin.settings.uncompletedTNTasksCount = value;
 					await plugin.saveSettings();
-					updateAllTaskNotesTaskCounts(plugin)
+					void updateAllTaskNotesTaskCounts(plugin)
 				})});
 			
 			new Setting(containerEl)
@@ -357,15 +309,11 @@ export class TCSettingTab extends PluginSettingTab {
 				let ph = 'all_tasks'
 				text
 				.setPlaceholder(ph)
-			.addText(text => {
-				let ph = 'all_tasks'
-				text
-				.setPlaceholder(ph)
 				.setValue(plugin.settings.allTNAndCheckboxTasksCount)
 				.onChange(async (value) => {
 					plugin.settings.allTNAndCheckboxTasksCount = value;
 					await plugin.saveSettings();
-					updateAllTaskNotesTaskCounts(plugin)
+					void updateAllTaskNotesTaskCounts(plugin)
 				})});
 
 			new Setting(containerEl)
@@ -374,15 +322,11 @@ export class TCSettingTab extends PluginSettingTab {
 				let ph = 'all_tasks_completed'
 				text
 				.setPlaceholder(ph)
-			.addText(text => {
-				let ph = 'all_tasks_completed'
-				text
-				.setPlaceholder(ph)
 				.setValue(plugin.settings.completedTNAndCheckboxTasksCount)
 				.onChange(async (value) => {
 					plugin.settings.completedTNAndCheckboxTasksCount = value;
 					await plugin.saveSettings();
-					updateAllTaskNotesTaskCounts(plugin)
+					void updateAllTaskNotesTaskCounts(plugin)
 				})});
 
 			new Setting(containerEl)
@@ -391,15 +335,11 @@ export class TCSettingTab extends PluginSettingTab {
 				let ph = 'all_tasks_uncompleted'
 				text
 				.setPlaceholder(ph)
-			.addText(text => {
-				let ph = 'all_tasks_uncompleted'
-				text
-				.setPlaceholder(ph)
 				.setValue(plugin.settings.uncompletedTNAndCheckboxTasksCount)
 				.onChange(async (value) => {
 					plugin.settings.uncompletedTNAndCheckboxTasksCount = value;
 					await plugin.saveSettings();
-					updateAllTaskNotesTaskCounts(plugin)
+					void updateAllTaskNotesTaskCounts(plugin)
 				})});
 		}
 
@@ -414,8 +354,8 @@ export class TCSettingTab extends PluginSettingTab {
 				.onChange(async (value) => {
 					plugin.settings.autoTasksCount = value;
 					await plugin.saveSettings();
-					updateAllTaskCounts(plugin)
-					updateAllTaskNotesTaskCounts(plugin)
+					void updateAllTaskCounts(plugin)
+					void updateAllTaskNotesTaskCounts(plugin)
 					this.display();
 				}));
 		}
