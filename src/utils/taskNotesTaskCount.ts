@@ -45,16 +45,26 @@ export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TF
 
     if (tn && tn.taskLinkDetectionService && file instanceof TFile) {
         let statuses = tn.statusManager?.statuses
-        let completedStatuses = statuses.filter((s: any) => {
-            let status = s.isCompleted
-            if (status) return true 
-            else return false
+        let completedStatuses = statuses.filter((s: unknown) => {
+            if (s && typeof s == "object" && "isCompleted" in s) {
+                let status = s.isCompleted
+                if (status) return true 
+            }
+            return false
         })
 
         let projectTasks = await tn.projectSubtasksService.getTasksLinkedToProject(file)
         
-        let completedProjectTasks = projectTasks.filter((t: any) => {
-            let task = completedStatuses.find((s: any) => s.value == t.status)
+        let completedProjectTasks = projectTasks.filter((t: unknown) => {
+            let task = completedStatuses.find((s: unknown) => {
+                if (s && typeof s == "object" && "value" in s &&
+                    t && typeof t == "object" && "status" in t
+                ) {
+                    return s.value == t.status
+                } else {
+                    return false
+                }
+            })
             if (task) return true 
             else return false
         })
@@ -99,7 +109,15 @@ export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TF
          
 
         let completedInlineTasks = inlineTasks.filter(t => {
-            return completedStatuses.find((s: any) => s.value == t.status)
+            return completedStatuses.find((s: unknown) => {
+                if (s && typeof s == "object" && "value" in s &&
+                    t && typeof t == "object" && "status" in t
+                ) {
+                    return s.value == t.status
+                } else {
+                    return false
+                }
+            })
         })
 
         let allTasks = [...projectTasks]
@@ -111,7 +129,15 @@ export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TF
         }
 
         let allCompletedTasks = allTasks.filter(t => {
-            return completedStatuses.find((s: any) => s.value == t.status)
+            return completedStatuses.find((s: unknown) => {
+                if (s && typeof s == "object" && "value" in s &&
+                    t && typeof t == "object" && "status" in t
+                ) {
+                    return s.value == t.status
+                } else {
+                    return false
+                }
+            })
         })
 
 
@@ -172,7 +198,7 @@ export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TF
 
 
 
-export const updateTaskNotesTaskCountOnCacheChanged = async (file: TFile, cache: CachedMetadata, plugin: TaskCountPlugin): Promise<void> => {
+export const updateTaskNotesTaskCountOnCacheChanged = (file: TFile, cache: CachedMetadata, plugin: TaskCountPlugin) => {
     if (plugin.settings.enableTaskNotesCount && plugin.settings.autoTasksCount) {
         let updateTaskNotes = needToUpdateTaskNotes(plugin, cache)
         let leaves = plugin.app.workspace.getLeavesOfType("markdown");
@@ -190,7 +216,7 @@ export const updateTaskNotesTaskCountOnCacheChanged = async (file: TFile, cache:
 
 
 
-export const updateAllTaskNotesTaskCounts = async (plugin: TaskCountPlugin): Promise<void> => {
+export const updateAllTaskNotesTaskCounts = (plugin: TaskCountPlugin) => {
     if (plugin.settings.enableTaskNotesCount && plugin.settings.autoTasksCount) {
         
         let leaves = plugin.app.workspace.getLeavesOfType("markdown");

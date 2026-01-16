@@ -15,14 +15,14 @@ export default class TaskCountPlugin extends Plugin {
 		registerCommands(this)
 		
 		this.registerEvent(
-			this.app.metadataCache.on("changed", async (file, data, cache) => {
-				void updateTaskCountOnCacheChanged(file, cache, this)
-				void updateTaskNotesTaskCountOnCacheChanged(file, cache, this)
+			this.app.metadataCache.on("changed", (file, data, cache) => {
+				updateTaskCountOnCacheChanged(file, cache, this)
+				updateTaskNotesTaskCountOnCacheChanged(file, cache, this)
 			})
 		);
 
 		this.registerEvent(
-			this.app.workspace.on("file-open", async (file) => {
+			this.app.workspace.on("file-open", (file) => {
 				if (file && this.settings.enableTaskNotesCount && this.settings.autoTasksCount) {
 					void updateTaskNotesTaskCount(this, file)
 				}

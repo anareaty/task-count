@@ -102,7 +102,7 @@ export const updateTasksCount = async (
 
 
 
-export const updateTaskCountOnCacheChanged = async (file: TFile, cache: CachedMetadata, plugin: TaskCountPlugin): Promise<void> => {
+export const updateTaskCountOnCacheChanged = (file: TFile, cache: CachedMetadata, plugin: TaskCountPlugin) => {
     if (plugin.settings.enableTasksCount && plugin.settings.autoTasksCount) {
         let sourcePath = file.path || ""
         let leaves = plugin.app.workspace.getLeavesOfType("markdown");
@@ -116,7 +116,7 @@ export const updateTaskCountOnCacheChanged = async (file: TFile, cache: CachedMe
 }
 
 
-export const updateAllTaskCounts = async (plugin: TaskCountPlugin): Promise<void> => {
+export const updateAllTaskCounts = (plugin: TaskCountPlugin) => {
 
     if (plugin.settings.enableTasksCount && plugin.settings.autoTasksCount) {
         let leaves = plugin.app.workspace.getLeavesOfType("markdown");
