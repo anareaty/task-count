@@ -14,13 +14,7 @@ export class LocalizationService {
   private currentLocale: string = 'en';
 
   setLocale() {
-    let locale: string = "en"
-		if (getLanguage) {
-      locale = getLanguage();
-    } else {
-      // Fallback for the older version of Obsidian
-      locale = window.localStorage.language
-    }
+    let locale: string = window.localStorage.language || "en"
     if (locale && locales[locale]) this.currentLocale = locale;
   }
 

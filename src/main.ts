@@ -15,7 +15,7 @@ export default class TaskCountPlugin extends Plugin {
 		registerCommands(this)
 		
 		this.registerEvent(
-			this.app.metadataCache.on("changed", (file, data, cache) => {
+			this.app.metadataCache.on("changed", (file, _data, cache) => {
 				updateTaskCountOnCacheChanged(file, cache, this)
 				updateTaskNotesTaskCountOnCacheChanged(file, cache, this)
 			})
