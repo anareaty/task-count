@@ -4,13 +4,54 @@ import { getNestedProperty, setNestedProperty } from "./propertyUtils"
 
 
 
+
+type status = {
+    autoArchive: boolean;
+    autoArchiveDelay: number;
+    color: string;
+    id: string;
+    isCompleted: boolean;
+    label: string;
+    order: number;
+    value: string;
+}
+
+type taskInfo = {
+    path: string;
+}
+
+type taskLinkObj = {
+    isValidTaskLink: boolean;
+    taskInfo: taskInfo
+}
+
+interface TaskNotes {
+  settings: {
+    taskIdentificationMethod: string;
+    taskTag: string;
+    taskPropertyName: string;
+    taskPropertyValue: string;
+  };
+  taskLinkDetectionService: {
+    detectTaskLink(linkText: string): Promise<taskLinkObj>
+  };
+  statusManager: {
+    statuses: status[]
+  };
+  projectSubtasksService: {
+    getTasksLinkedToProject(file: TFile): Promise<unknown[]>
+  };
+}
+
+
 export const needToUpdateTaskNotes = (plugin: TaskCountPlugin, cache?: CachedMetadata | null): boolean => {
     if (cache && plugin.settings.enableTaskNotesCount) {
         let isTask = false
         //@ts-ignore
-        let tn = plugin.app.plugins.plugins.tasknotes
+        let tn: TaskNotes | null = plugin.app.plugins?.getPlugin("tasknotes")
         if (tn) {
             let taskIdentificationMethod = tn.settings.taskIdentificationMethod
+        
             if (taskIdentificationMethod == "tag") {
                 let taskTag = tn.settings.taskTag
                 if (cache.frontmatter?.tags?.includes(taskTag)) {
@@ -37,7 +78,7 @@ export const needToUpdateTaskNotes = (plugin: TaskCountPlugin, cache?: CachedMet
 export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TFile | null, view?: View): Promise<void> => {
 
     //@ts-ignore
-    let tn = plugin.app.plugins.getPlugin("tasknotes")
+    let tn: TaskNotes = plugin.app.plugins.getPlugin("tasknotes")
 
     if (!file && view instanceof MarkdownView) {
         file = view.file
@@ -45,6 +86,7 @@ export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TF
 
     if (tn && tn.taskLinkDetectionService && file instanceof TFile) {
         let statuses = tn.statusManager?.statuses
+        
         let completedStatuses = statuses.filter((s: unknown) => {
             if (s && typeof s == "object" && "isCompleted" in s) {
                 let status = s.isCompleted
@@ -53,7 +95,7 @@ export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TF
             return false
         })
 
-        let projectTasks = await tn.projectSubtasksService.getTasksLinkedToProject(file)
+        let projectTasks = await tn.projectSubtasksService.getTasksLinkedToProject(file) 
         
         let completedProjectTasks = projectTasks.filter((t: unknown) => {
             let task = completedStatuses.find((s: unknown) => {
@@ -88,6 +130,7 @@ export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TF
                     let linkText = link.original
                     let taskLinkObj = await tn.taskLinkDetectionService?.detectTaskLink(linkText)
 
+                    console.log(taskLinkObj)
                     if (taskLinkObj?.isValidTaskLink) {
                         let task = taskLinkObj.taskInfo
                         inlineTasks.push(task)
@@ -123,7 +166,7 @@ export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TF
         let allTasks = [...projectTasks]
 
         for (let task of inlineTasks) {
-            if (!allTasks.find(t => t.path == task.path)) {
+            if (!allTasks.find((t: taskInfo) => t.path == task.path)) {
                 allTasks.push(task)
             }
         }
