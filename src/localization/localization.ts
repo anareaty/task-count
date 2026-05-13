@@ -13,7 +13,7 @@ export class LocalizationService {
   private currentLocale: string = 'en';
 
   setLocale() {
-    let locale = window.localStorage.language || "en"
+    let locale = window.localStorage.language
     if (locale && typeof locale == "string" && locales[locale]) this.currentLocale = locale;
   }
 
