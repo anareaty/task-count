@@ -48,8 +48,8 @@ export const needToUpdateTaskNotes = (plugin: TaskCountPlugin, cache?: CachedMet
     if (cache && plugin.settings.enableTaskNotesCount) {
         let isTask = false
         // @ts-expect-error, not typed
-        let tn = plugin.app.plugins?.getPlugin("tasknotes")
-        if (tn instanceof TaskNotes) {
+        let tn = plugin.app.plugins?.getPlugin("tasknotes") as TaskNotes | null
+        if (tn) {
             let taskIdentificationMethod = tn.settings.taskIdentificationMethod
         
             if (taskIdentificationMethod == "tag") {
@@ -78,13 +78,13 @@ export const needToUpdateTaskNotes = (plugin: TaskCountPlugin, cache?: CachedMet
 export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TFile | null, view?: View): Promise<void> => {
 
     // @ts-expect-error, not typed
-    let tn = plugin.app.plugins?.getPlugin("tasknotes")
+    let tn = plugin.app.plugins?.getPlugin("tasknotes") as TaskNotes | null
 
     if (!file && view instanceof MarkdownView) {
         file = view.file
     }
 
-    if (tn instanceof TaskNotes && tn.taskLinkDetectionService && file instanceof TFile) {
+    if (tn && tn.taskLinkDetectionService && file instanceof TFile) {
         let statuses = tn.statusManager?.statuses
         
         let completedStatuses = statuses.filter((s: unknown) => {
