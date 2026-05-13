@@ -130,7 +130,7 @@ export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TF
                     let linkText = link.original
                     let taskLinkObj = await tn.taskLinkDetectionService?.detectTaskLink(linkText)
 
-                    console.log(taskLinkObj)
+                    
                     if (taskLinkObj?.isValidTaskLink) {
                         let task = taskLinkObj.taskInfo
                         inlineTasks.push(task)
