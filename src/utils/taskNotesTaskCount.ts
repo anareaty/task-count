@@ -3,9 +3,7 @@ import TaskCountPlugin from "main"
 import { getNestedProperty, setNestedProperty } from "./propertyUtils"
 
 
-interface PluginManager {
-  getPlugin: (name: string) => TaskNotes | null;
-}
+
 
 type status = {
     autoArchive: boolean;
@@ -43,6 +41,10 @@ interface TaskNotes {
   projectSubtasksService: {
     getTasksLinkedToProject(file: TFile): Promise<unknown[]>
   };
+}
+
+interface PluginManager {
+  getPlugin: (name: string) => TaskNotes | null;
 }
 
 
