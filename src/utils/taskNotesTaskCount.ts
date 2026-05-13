@@ -4,7 +4,7 @@ import { getNestedProperty, setNestedProperty } from "./propertyUtils"
 
 
 interface PluginManager {
-  getPlugin: (name: string) => any;
+  getPlugin: (name: string) => TaskNotes | null;
 }
 
 type status = {
@@ -50,7 +50,7 @@ export const needToUpdateTaskNotes = (plugin: TaskCountPlugin, cache?: CachedMet
     if (cache && plugin.settings.enableTaskNotesCount) {
         let isTask = false
         // @ts-expect-error, not typed
-        let tn = (plugin.app.plugins as PluginManager).getPlugin("tasknotes") as TaskNotes | null
+        let tn = (plugin.app.plugins as PluginManager).getPlugin("tasknotes")
         if (tn) {
             let taskIdentificationMethod = tn.settings.taskIdentificationMethod
         
@@ -81,7 +81,7 @@ export const needToUpdateTaskNotes = (plugin: TaskCountPlugin, cache?: CachedMet
 export const updateTaskNotesTaskCount = async (plugin: TaskCountPlugin, file: TFile | null, view?: View): Promise<void> => {
 
     // @ts-expect-error, not typed
-    let tn = (plugin.app.plugins as PluginManager).getPlugin("tasknotes") as TaskNotes | null
+    let tn = (plugin.app.plugins as PluginManager).getPlugin("tasknotes")
 
     if (!file && view instanceof MarkdownView) {
         file = view.file
