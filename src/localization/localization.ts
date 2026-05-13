@@ -14,7 +14,7 @@ export class LocalizationService {
 
   setLocale() {
     let locale = window.localStorage.language as string | undefined
-    if (locale && typeof locale == "string" && locales[locale]) this.currentLocale = locale;
+    if (locale && locales[locale]) this.currentLocale = locale;
   }
 
   t(key: string): string {
