@@ -54,7 +54,8 @@ export const needToUpdateTaskNotes = (plugin: TaskCountPlugin, cache?: CachedMet
         
             if (taskIdentificationMethod == "tag") {
                 let taskTag = tn.settings.taskTag
-                if (cache.frontmatter?.tags?.includes(taskTag)) {
+				let tags = cache.frontmatter?.tags as string[] | null
+                if (tags && tags.includes(taskTag)) {
                     isTask = true
                 }
             } else if (taskIdentificationMethod == "property") {
